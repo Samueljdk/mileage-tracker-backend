@@ -12,9 +12,9 @@ const TripDashboard = ({ trip, setTrips }) => {
             return;
         }
         try {
-            await api.delete(`/trip/${tripId}`);
+            await api.delete(`/trips/${tripId}`);
             toast.success("Trip deleted successfully!");
-            setTrips(prevTrips => prevTrips.filter(t => t._id !== tripId)); //get rid of the deleted trip from the list and refresh
+            setTrips(prevTrips => prevTrips.filter(t => t._id !== tripId)); 
         } catch (error) {
             console.error("Error deleting trip:", error);
             toast.error("An error occurred while deleting the trip. Please try again later.");
@@ -22,7 +22,7 @@ const TripDashboard = ({ trip, setTrips }) => {
     };
 
 
-  return <Link to={`/trip/${trip._id}`} 
+  return <Link to={`/trips/${trip._id}`} 
     className="block bg-white rounded-lg shadow-md p-6 hover:bg-gray-50 transition">
     
     <div className="card-body">
