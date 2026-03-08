@@ -9,9 +9,9 @@ const Navbar = () => {
       <div className="w-full px-6 py-3">
         <div className="flex items-center justify-between">
 
-          {/* Left: Logo + Title */}
           <Link
             to="/"
+            
             className="flex items-center gap-3 hover:opacity-90 transition"
           >
             <img
@@ -25,7 +25,6 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {/* Right: Add Trip Button */}
           <Link
             to="/create"
             className="btn btn-primary btn-sm md:btn-md gap-2"

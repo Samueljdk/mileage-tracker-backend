@@ -1,0 +1,5 @@
+
+
+phase 2 improvement ideas:
+1. Update UI:
+.components/TripsnotFound.jsx: make the UI more appealing and add create trip button. 
