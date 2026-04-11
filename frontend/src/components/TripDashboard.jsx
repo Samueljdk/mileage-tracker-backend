@@ -21,7 +21,7 @@ const TripDashboard = ({ trip, setTrips }) => {
         }
     };
 
-
+/*
   return <Link to={`/trips/${trip._id}`} 
     className="block bg-white rounded-lg shadow-md p-6 hover:bg-gray-50 transition">
     
@@ -40,6 +40,32 @@ const TripDashboard = ({ trip, setTrips }) => {
         </div>
     </div>
   </Link>
+*/
+
+  return (
+    <tr>
+        <td>{trip.title}</td>
+        <td>{trip.startLocation}</td>
+        <td>{trip.endLocation}</td>
+        <td>{trip.description}</td>
+        <td>{new Date(trip.date).toLocaleDateString()}</td>
+        <td>
+            <div className="flex items-center gap-2">
+                <Link to={`/trips/${trip._id}`}>
+                    <PenSquareIcon className="size-4"/>
+                </Link>
+                <button className="btn btn-ghost btn-xs text-error" onClick={(e) => handleDelete(e, trip._id)}>
+                    <Trash2Icon className="size-4"/>
+                </button>
+            </div>
+        </td>
+    </tr>
+  );
+
+
+
+
+
 };
 
 export default TripDashboard;
