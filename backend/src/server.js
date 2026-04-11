@@ -16,7 +16,7 @@ app.use(cors()); // Enable CORS for all routes
 
 app.use(express.json()); // Middleware to parse JSON request bodies
 
-app.use(rateLimiter); // Apply rate limiter middleware to all routes
+//app.use(rateLimiter); // Apply rate limiter middleware to all routes
 
 
 
