@@ -1,3 +1,4 @@
+
 import { PenSquareIcon, Trash2Icon } from "lucide-react";
 import { Link } from "react-router";
 import toast from "react-hot-toast";
@@ -21,7 +22,7 @@ const TripDashboard = ({ trip, setTrips }) => {
         }
     };
 
-/*
+
   return <Link to={`/trips/${trip._id}`} 
     className="block bg-white rounded-lg shadow-md p-6 hover:bg-gray-50 transition">
     
@@ -40,8 +41,9 @@ const TripDashboard = ({ trip, setTrips }) => {
         </div>
     </div>
   </Link>
-*/
 
+
+/*
   return (
     <tr>
         <td>{trip.title}</td>
@@ -62,7 +64,7 @@ const TripDashboard = ({ trip, setTrips }) => {
     </tr>
   );
 
-
+*/
 
 
 
