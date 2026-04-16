@@ -5,11 +5,12 @@ import { ArrowLeftIcon } from "lucide-react";
 import toast from 'react-hot-toast';
 import api from '../lib/axios.js';
 import {useState} from "react";
+import { useEffect } from 'react';
 
 const CreatePage = () => {
 
   const [title, setTitle] = React.useState("");
-  const [date, setDate] = React.useState("");
+  const [date, setDate] = React.useState(new Date().toISOString().split("T")[0]);
   const [startLocation, setStartLocation] = React.useState("");
   const [endLocation, setEndLocation] = React.useState("");
   const [purpose, setPurpose] = React.useState("");
@@ -62,9 +63,41 @@ const CreatePage = () => {
 
     setTimeout(() => {
       setLoading(false);
-      alert("Trip created successfully!");
+      //alert("Trip created successfully!");
     }, 1000);
   };
+
+  const unsavedChanges = !localStorage.getItem("clonedTrip") && (title || purpose || startLocation || endLocation || odometerStart || odometerEnd || remarks);
+
+  useEffect(() => {
+      const clonedTrip = localStorage.getItem("clonedTrip");
+      if (clonedTrip) {
+        const tripData = JSON.parse(clonedTrip);
+          setTitle(tripData.title||"");
+          setPurpose(tripData.purpose||"");
+          setStartLocation(tripData.startLocation||"");
+          setEndLocation(tripData.endLocation||"");
+          setRemarks(tripData.remarks||"");
+          localStorage.removeItem("clonedTrip");
+      }}, []);
+
+
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if(!unsavedChanges) return;
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [unsavedChanges]);
+
+
+
 
   return (
     <div className="min-h-screen">
@@ -79,20 +112,24 @@ const CreatePage = () => {
             <div className="card bg-base-100">
               <div className="card-body">
                 <h2 className="card-title text-2xl mb-4">Create New Trip</h2>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className={loading? "opacity-70":""}>
                   <div className="form-control mb-4">
                     <label className="label">
-                      <span className="label-text">Title*</span>
+                      <span className="label-text">Title</span>
+                      {!title && <p className="text-error text-sm">*</p>}
                     </label>
-                    <input type="text"
+                    <input 
+                      type="text"
                       className="input input-bordered w-full"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
+                      autoFocus 
                     />
                   </div>
                   <div className="form-control mb-4">
                     <label className="label">
-                      <span className="label-text">Purpose*</span>
+                      <span className="label-text">Purpose</span>
+                      {!purpose && <p className="text-error text-sm">*</p>}
                     </label>
                     <textarea 
                       className="textarea textarea-bordered w-full"
@@ -102,55 +139,87 @@ const CreatePage = () => {
                   </div>
                   <div className="form-control mb-4">
                     <label className="label">
-                      <span className="label-text">Date*</span>
+                      <span className="label-text">Date</span>
+                      {!date && <p className="text-error text-sm">*</p>}
                     </label>
                     <input type="date" 
                       className="input input-bordered w-full"
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
+                      autoComplete= "date"
                     />
                   </div>
                   <div className="form-control mb-4">
                     <label className="label">
-                      <span className="label-text">Start Location*</span>
+                      <span className="label-text">Start Location</span>
+                      {!startLocation && <p className="text-error text-sm">*</p>}
                     </label>
+
+
                     <input type="text" 
                       className="input input-bordered w-full"
                       value={startLocation}
                       onChange={(e) => setStartLocation(e.target.value)}
+                      autoComplete="street-address"
+                      placeholder="123 Main St, Brandon, MP"
                     />
+
                   </div>
                   <div className="form-control mb-4">
                     <label className="label">
-                      <span className="label-text">End Location*</span>
+                      <span className="label-text">End Location</span>
+                      {!endLocation && <p className="text-error text-sm">*</p>}
                     </label>
+                    
                     <input type="text" 
                       className="input input-bordered w-full"
                       value={endLocation}
                       onChange={(e) => setEndLocation(e.target.value)}
+                      autoComplete="street-address"
+                      placeholder="456 Oak Ave, Winnipeg, MB"
                     />
+                    
                   </div>
                   <div className="form-control mb-4">
                     <label className="label">
-                      <span className="label-text">Odometer Start*</span>
+                      <span className="label-text">Odometer Start</span>
+                      {!odometerStart && <p className="text-error text-sm">*</p>}
                     </label>
                     <input type="number" 
                       className="input input-bordered w-full"
                       value={odometerStart}
                       onChange={(e) => setOdometerStart(e.target.value)}
+                      inputMode="numeric"
+                      pattern="[0-9]*"
                     />
                   </div>
                   <div className="form-control mb-4">
                     <label className="label">
-                      <span className="label-text">Odometer End*</span>
+                      <span className="label-text">Odometer End</span>
+                      {!odometerEnd && <p className="text-error text-sm">*</p>}
                     </label>
                     <input type="number" 
                       className="input input-bordered w-full"
                       value={odometerEnd}
                       onChange={(e) => setOdometerEnd(e.target.value)}
+                      inputMode="numeric"
+                      pattern="[0-9]*"
                     />
                   </div>
-                  <div className="form-control mb-6"> {/* Added margin-bottom for spacing */}
+
+                  
+                  <div className="form-control mb-4">
+                    <label className="label">
+                      <span className="label-text">Distance</span>
+                    </label>
+                    <input type="number" 
+                      className="input input-bordered w-full"
+                      value={ odometerEnd && odometerStart ? Number(odometerEnd) - Number(odometerStart) : 0}
+                      readOnly
+                    />
+                  </div>
+
+                  <div className="form-control mb-6"> 
                     <label className="label">
                       <span className="label-text">Remarks</span>
                     </label>

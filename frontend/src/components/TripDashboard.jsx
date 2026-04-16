@@ -1,8 +1,11 @@
 
-import { PenSquareIcon, Trash2Icon } from "lucide-react";
+import { PenSquareIcon, Trash2Icon, CopyIcon } from "lucide-react";
 import { Link } from "react-router";
 import toast from "react-hot-toast";
 import api from "../lib/axios.js";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
+
 
 const TripDashboard = ({ trip, setTrips }) => {
 
@@ -22,6 +25,22 @@ const TripDashboard = ({ trip, setTrips }) => {
         }
     };
 
+    const navigate = useNavigate();
+    const handleClone = (e) =>{
+        e.preventDefault();
+
+        const clonedTrip = {
+            title: trip.title,
+            date: new Date().toISOString().split("T")[0],
+            startLocation: trip.startLocation,
+            endLocation: trip.endLocation,
+            remarks: trip.remarks,
+        };
+        localStorage.setItem("clonedTrip", JSON.stringify(clonedTrip));
+        navigate("/create");
+    }
+
+
 
   return <Link to={`/trips/${trip._id}`} 
     className="block bg-white rounded-lg shadow-md p-6 hover:bg-gray-50 transition">
@@ -33,10 +52,19 @@ const TripDashboard = ({ trip, setTrips }) => {
         <div className="card-actions justify-between items-center mt-4">
             <span className="text-sm text-base-content/60">{new Date(trip.date).toLocaleDateString()}</span>
             <div className="flex items-center gap-2"> 
+
+                {/*clone*/}
+                <button className="btn btn-ghost btn-xs" onClick={handleClone} title="Clone Trip">
+                    <CopyIcon className="size-4"/>
+                </button>
+
+
+                {/*delete*/}
                 <PenSquareIcon className="size-4"/>
                 <button className="btn btn-ghost btn-xs text-error" onClick={(e) => handleDelete(e, trip._id)}>
                     <Trash2Icon className="size-4"/>
                 </button>
+
             </div>
         </div>
     </div>
