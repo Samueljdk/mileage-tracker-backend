@@ -1,8 +1,9 @@
 import express from 'express';
-import { getAllTrips,createTrip,updateTrip,deleteTrip,getTripById } from '../controllers/tripsController.js';
+import { getAllTrips,createTrip,updateTrip,deleteTrip,getTripById, exportTrips} from '../controllers/tripsController.js';
 
 const router = express.Router();
 
+router.get("/export", exportTrips);
 
 //Endpoints: 
 router.get("/", getAllTrips); //useses the controllers in /backend/controllers/tripsController.js

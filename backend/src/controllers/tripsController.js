@@ -119,3 +119,63 @@ export async function deleteTrip(req, res) {
         res.status(500).json({message: "Error deleting trip", error});
     }
 }
+
+
+export const exportTrips = async (req, res) => {
+  try {
+    const {
+      startDate,
+      endDate,
+      minOdometer,
+      maxOdometer,
+      location
+    } = req.query;
+
+    let query = {};
+
+    // Date filter
+    if (startDate && endDate) {
+      query.date = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate)
+      };
+    }
+
+    // Odometer filter
+    if (minOdometer && maxOdometer) {
+      query.odometerStart = { $gte: Number(minOdometer) };
+      query.odometerEnd = { $lte: Number(maxOdometer) };
+    }
+
+    // Location filter (checks both start & end)
+    if (location) {
+      query.$or = [
+        { startLocation: { $regex: location, $options: "i" } },
+        { endLocation: { $regex: location, $options: "i" } }
+      ];
+    }
+
+    const trips = await Trip.find(query).sort({ date: -1 });
+
+    // CSV header
+    const header =
+      "Date,Title,Start Location,End Location,Start KM,End KM,Distance,Purpose,Remarks\n";
+
+    const rows = trips.map(t =>
+      `${t.date.toISOString().split("T")[0]},${t.title},${t.startLocation},${t.endLocation},${t.odometerStart},${t.odometerEnd},${t.distance},${t.purpose},${t.remarks}`
+    );
+
+    const csv = header + rows.join("\n");
+
+    //res.header("Content-Type", "text/csv");
+    //res.attachment("trips.csv");
+    //res.send(csv);
+
+    res.setHeader("Content-Type", "text/csv; charset=utf-8");
+    res.setHeader("Content-Disposition", "attachment; filename=trips.csv");
+    res.status(200).send(csv);
+    
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
