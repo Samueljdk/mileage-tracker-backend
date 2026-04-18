@@ -33,6 +33,7 @@ export async function createTrip(req, res) {
             startLocation, 
             endLocation, 
             purpose, 
+            tripType="business",
             odometerStart, 
             odometerEnd, 
             remarks } = req.body;
@@ -49,6 +50,7 @@ export async function createTrip(req, res) {
             startLocation,
             endLocation,
             purpose,
+            tripType,
             odometerStart,
             odometerEnd,
             distance: distanceCal,
@@ -73,6 +75,7 @@ export async function updateTrip(req, res) {
             startLocation, 
             endLocation, 
             purpose, 
+            tripType="business",
             odometerStart, 
             odometerEnd, 
             remarks } = req.body;
@@ -90,6 +93,7 @@ export async function updateTrip(req, res) {
             endLocation,
             distance: distanceCal,
             purpose,
+            tripType,
             odometerStart,
             odometerEnd,
             remarks
@@ -128,7 +132,8 @@ export const exportTrips = async (req, res) => {
       endDate,
       minOdometer,
       maxOdometer,
-      location
+      location,
+      tripType
     } = req.query;
 
     let query = {};
@@ -155,11 +160,16 @@ export const exportTrips = async (req, res) => {
       ];
     }
 
+    // Trip Type filter
+    if (tripType) {
+        query.tripType = tripType;
+    }
+
     const trips = await Trip.find(query).sort({ date: -1 });
 
     // CSV header
     const header =
-      "Date,Title,Purpose, Start Location,End Location,Odometer Start,Odometer End,Distance,TotalKM,Remarks\n";
+      "Date,Title,Purpose, Trip Type, Start Location,End Location,Odometer Start,Odometer End,TotalKM,Remarks\n";
 
     
     //the followin fuction allows users to enter commas witout breaking csv format. 
@@ -180,6 +190,7 @@ export const exportTrips = async (req, res) => {
         t.date.toISOString().split("T")[0],
         t.title, 
         t.purpose,
+        t.tripType,
         t.startLocation,
         t.endLocation,
         t.odometerStart,

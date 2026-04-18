@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 
 
 const ExportTrips = () => { 
-  const [filters, setFilters] = useState({startDate: "", endDate: "", minOdometer: "", maxOdometer: "",  location: ""});
+  const [filters, setFilters] = useState({startDate: "", endDate: "", minOdometer: "", maxOdometer: "",  location: "", tripType: ""});
 
  
   const handleChange = (e) => { // this is a handler for filters 
@@ -51,6 +51,12 @@ const ExportTrips = () => {
                 <input type="number" name="maxOdometer" placeholder="Max Odometer" onChange={handleChange} className="input input-bordered w-full"/>
 
                 <input type="text" name="location" placeholder="Location (start or end)" onChange={handleChange} className="input input-bordered w-full md:col-span-2"/>
+
+                <select name="tripType" onChange={handleChange} className="input input-bordered w-full md:col-span-2">
+                  <option value="">All Types</option>
+                  <option value="business">Business</option>
+                  <option value="personal">Personal</option>
+                </select>
 
             </div>
 
