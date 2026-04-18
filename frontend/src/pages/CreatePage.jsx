@@ -41,6 +41,8 @@ const CreatePage = () => {
         odometerEnd,
         remarks
       });
+
+      localStorage.setItem("lastOdometerEnd", odometerEnd); // Store the last odometer end value in localStorage
       toast.success("Trip created successfully!");
       navigate("/"); // Redirect to home page 
 
@@ -67,7 +69,17 @@ const CreatePage = () => {
     }, 1000);
   };
 
+
   const unsavedChanges = !localStorage.getItem("clonedTrip") && (title || purpose || startLocation || endLocation || odometerStart || odometerEnd || remarks);
+
+
+  useEffect(() => {
+    const lastOdometerEnd = localStorage.getItem("lastOdometerEnd");
+    if (lastOdometerEnd) {
+      setOdometerStart(lastOdometerEnd);
+    }
+  }, []);
+
 
   useEffect(() => {
       const clonedTrip = localStorage.getItem("clonedTrip");
@@ -80,8 +92,6 @@ const CreatePage = () => {
           setRemarks(tripData.remarks||"");
           localStorage.removeItem("clonedTrip");
       }}, []);
-
-
 
   useEffect(() => {
     const handleBeforeUnload = (e) => {

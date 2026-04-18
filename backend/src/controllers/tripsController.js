@@ -159,10 +159,34 @@ export const exportTrips = async (req, res) => {
 
     // CSV header
     const header =
-      "Date,Title,Start Location,End Location,Start KM,End KM,Distance,Purpose,Remarks\n";
+      "Date,Title,Purpose, Start Location,End Location,Odometer Start,Odometer End,Distance,TotalKM,Remarks\n";
+
+    
+    //the followin fuction allows users to enter commas witout breaking csv format. 
+    function csvSafe(value) {
+        if(value==null || value === undefined) return "";
+        const stringValue = String(value);
+        const escaped= stringValue.replace(/"/g, '""'); // Escape double quotes by doubling them
+        if(/[",\n]/.test(escaped)) { // If value contains comma, quote, or newline, wrap it in double quotes
+            return `"${escaped}"`;
+        }
+        return escaped;
+    }
+
+
 
     const rows = trips.map(t =>
-      `${t.date.toISOString().split("T")[0]},${t.title},${t.startLocation},${t.endLocation},${t.odometerStart},${t.odometerEnd},${t.distance},${t.purpose},${t.remarks}`
+    [
+        t.date.toISOString().split("T")[0],
+        t.title, 
+        t.purpose,
+        t.startLocation,
+        t.endLocation,
+        t.odometerStart,
+        t.odometerEnd,
+        t.distance,
+        t.remarks
+    ].map(csvSafe).join(",")
     );
 
     const csv = header + rows.join("\n");
@@ -174,7 +198,7 @@ export const exportTrips = async (req, res) => {
     res.setHeader("Content-Type", "text/csv; charset=utf-8");
     res.setHeader("Content-Disposition", "attachment; filename=trips.csv");
     res.status(200).send(csv);
-    
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
