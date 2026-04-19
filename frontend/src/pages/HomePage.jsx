@@ -14,10 +14,15 @@ const homePage = () => {
   const [loading, setLoading] = React.useState(true);
 
   const [filter, setFilter] = React.useState("all");
-  const filteredTrips= filter === "all" ? trips : trips.filter(t => t.tripType === filter);
+  const [sort, setSort] = React.useState("new");
 
-  const totalDistance = filteredTrips.reduce((total, trip) => total + (trip.odometerEnd - trip.odometerStart), 0);
+  const filteredTrips= filter === "all" ? trips : trips.filter(t => t.tripType === filter);
+  const sortedTrips = [...filteredTrips].sort((a, b) => sort ==="new"? new Date(b.date) - new Date(a.date): new Date(a.date) - new Date(b.date));
+
+  const totalDistance = sortedTrips.reduce((total, trip) => total + (trip.odometerEnd - trip.odometerStart), 0);
   
+
+
   {/*display trips on homepage*/}
   useEffect(() => {
     const fetchTrips = async () => {
@@ -68,6 +73,16 @@ const homePage = () => {
               <option value="personal">Personal</option>
             </select>
 
+            {/*sort trips by date*/}
+            <select 
+              className="select select-bordered select-sm mb-4"
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+            >
+              <option value="new">Newest First</option>
+              <option value="old">Oldest First</option>
+            </select>
+
             {/*total distance badge*/}
             <div className="flex-none">
               <div className="badge badge-primary flex items-center gap-2">
@@ -80,10 +95,10 @@ const homePage = () => {
 
           
           {/*display trips if available */}
-          {trips.length > 0 && !isRateLimited && (
+          {sortedTrips.length > 0 && !isRateLimited && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/*displaying filtered trips*/}
-                {filteredTrips.map((trip) => (
+                {sortedTrips.map((trip) => (
                     <TripDashboard key={trip._id} trip={trip} setTrips={setTrips} /> 
                 ))}
               </div>

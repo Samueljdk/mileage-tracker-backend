@@ -17,3 +17,6 @@ create user accounts to allow different users to use the software. this will inc
 
 6. Trip type (business/personal)- Done
 
+7. Display total km on homepage- DONE 
+
+8. Homepage sort by date toggle. 
