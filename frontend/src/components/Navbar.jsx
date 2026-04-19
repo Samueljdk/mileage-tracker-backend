@@ -1,13 +1,18 @@
 
 import React from "react";
 import { Link } from "react-router";
-import { PlusIcon, DownloadIcon, CarIcon } from "lucide-react";
+import { PlusIcon, DownloadIcon, CarIcon, MoonIcon,  SunIcon } from "lucide-react";
 import logo from "../assets/Logo-removebg-preview.png";
 
 
 
 
-const Navbar = () => {
+const Navbar = ({ theme, setTheme }) => {
+  
+  const toggleTheme = () => {
+    setTheme(theme === "winter"?"night":"winter");
+  };
+
   return (
     <header className="bg-base-200 border-b border-base-300 shadow-sm">
       <div className="w-full px-6 py-3">
@@ -41,8 +46,14 @@ const Navbar = () => {
               <span className="hidden sm:inline">Export Trips</span>
             </Link>
 
+            {/*Theme toggle button*/}
+            <button 
+              className="btn btn-ghost btn-sm md:btn-md gap-2" onClick={toggleTheme} aria-label="Toggle Theme">
+              {theme === "winter" ? <MoonIcon size={18} /> : <SunIcon size={18} />}
+            </button>
+              
           </div>
-
+ 
 
         </div>
       </div>

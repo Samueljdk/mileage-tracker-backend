@@ -60,7 +60,7 @@ const homePage = () => {
   return (
 
     <div className= "min-h-screen">
-       <Navbar />
+       
         {isRateLimited && <RateLimitedUI />}
         
         <div className="max-w-7xl mx-auto px-4 py-8">
@@ -122,6 +122,7 @@ const homePage = () => {
               </div>
             )}
         </div>
+
     </div>
   );
 

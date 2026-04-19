@@ -22,3 +22,7 @@ create user accounts to allow different users to use the software. this will inc
 8. Homepage sort by date toggle. -DONE
 
 9. Search bar on homepage- DONE
+
+10. Night mode
+
+11. Organized display of trips on homepage

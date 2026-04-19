@@ -82,7 +82,7 @@ const TripDetailPage = () => {
     }
 
   return (
-    <div><Navbar/>
+    <div>
 
       <div className="min-h-screen bg-base-200">
         
