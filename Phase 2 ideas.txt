@@ -26,3 +26,5 @@ create user accounts to allow different users to use the software. this will inc
 10. Night mode - DONE
 
 11. Organized display of trips on homepage- DONE
+
+12. Export to pdf 

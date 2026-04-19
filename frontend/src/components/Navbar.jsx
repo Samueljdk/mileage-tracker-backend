@@ -18,12 +18,12 @@ const Navbar = ({ theme, setTheme }) => {
       <div className="w-full px-6 py-3">
         <div className="flex items-center gap-3 justify-between">
 
-          {/*logo and title*/}
+          {/*link component for logo and title*/}
           <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition">
             <img
               src={logo}
               alt="Mileage Tracker Logo"
-              className="h-10 w-10 object-contain"
+              className="h-14 w-14 object-contain"
             />
 
             <span className="text-2xl font-bold text-primary tracking-tight">
