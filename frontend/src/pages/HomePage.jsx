@@ -27,6 +27,9 @@ const homePage = () => {
   const filteredTrips= filter === "all" ? searchedTrips : searchedTrips.filter(t => t.tripType === filter);
   const sortedTrips = [...filteredTrips].sort((a, b) => sort ==="new"? new Date(b.date) - new Date(a.date): new Date(a.date) - new Date(b.date));
 
+  const businessTrips = sortedTrips.filter((trip) => trip.tripType === "business");
+  const personalTrips = sortedTrips.filter((trip) => trip.tripType === "personal");
+
   const totalDistance = sortedTrips.reduce((total, trip) => total + (trip.odometerEnd - trip.odometerStart), 0);
   
 
@@ -113,21 +116,43 @@ const homePage = () => {
 
           
           {/*display trips if available */}
-          {sortedTrips.length > 0 && !isRateLimited && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/*displaying filtered trips*/}
-                {sortedTrips.map((trip) => (
-                    <TripDashboard key={trip._id} trip={trip} setTrips={setTrips} /> 
-                ))}
-              </div>
-            )}
+          {sortedTrips.length > 0 && !isRateLimited && 
+            (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                  
+                  {/*displaying business trips in col*/}
+                  <div>
+                    <h2 className="text-lg font-semibold mb-4 text-primary">Business Trips</h2>
+                    {businessTrips.length >0 ? 
+                    (<div className="space-y-4">
+                      {businessTrips.map((trip) => (
+                        <TripDashboard key={trip._id} trip={trip} setTrips={setTrips} /> 
+                      ))}</div>)
+                      :(<p className="text-sm text-gray-500">No business trips found.</p>)}
+                  </div>
+                  
+                  {/*displaying personal trips in col*/}
+                  <div>
+                    <h2 className="text-lg font-semibold mb-4 text-primary">Personal Trips</h2>
+                    {personalTrips.length >0 ?(
+                      <div className="space-y-4">
+
+                        {personalTrips.map((trip) => (<TripDashboard key={trip._id} trip={trip} setTrips={setTrips} /> 
+                        ))}
+                      </div>
+                    ):(<p className="text-sm text-gray-500">No personal trips found.</p>)}
+                  </div>
+
+                </div>
+            )
+          }
+              
+
         </div>
-
+        
     </div>
+
   );
-
-
-
 
 };
 
