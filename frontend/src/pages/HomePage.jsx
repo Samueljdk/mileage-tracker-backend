@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from "../components/Navbar.jsx";
 import RateLimitedUI from '../components/RateLimitedUI.jsx';
 import api from '../lib/axios.js';
@@ -13,10 +13,18 @@ const homePage = () => {
   const [trips, setTrips] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
+  const [search, setSearch]= useState("");
   const [filter, setFilter] = React.useState("all");
   const [sort, setSort] = React.useState("new");
 
-  const filteredTrips= filter === "all" ? trips : trips.filter(t => t.tripType === filter);
+
+
+  const matchesSearch=(trip,query)=>{ if(!query) return true; const q=query.toLowerCase(); return [trip.title, trip.purpose, trip.tripType, trip.startLocation, trip.endLocation, trip.remarks].filter(Boolean).some(value => value.toLowerCase().includes(q)); } 
+  const searchedTrips= trips.filter(trip => matchesSearch(trip,search));
+
+
+
+  const filteredTrips= filter === "all" ? searchedTrips : searchedTrips.filter(t => t.tripType === filter);
   const sortedTrips = [...filteredTrips].sort((a, b) => sort ==="new"? new Date(b.date) - new Date(a.date): new Date(a.date) - new Date(b.date));
 
   const totalDistance = sortedTrips.reduce((total, trip) => total + (trip.odometerEnd - trip.odometerStart), 0);
@@ -60,8 +68,18 @@ const homePage = () => {
 
           {trips.length === 0 && !loading && !isRateLimited && <TripsNotFound />}
 
-          {/*row for filter and total distance*/}
+          {/*row for filter, search, and total distance*/}
           <div className="flex items-center gap-4 mb-6 flex-wrap"> 
+            
+            {/*search trips*/}
+            <input
+              type="text"
+              placeholder="Search trips..."
+              className="input input-bordered input-sm mb-4"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+
             {/*filter trips*/}
             <select 
               className="select select-bordered select-sm mb-4"

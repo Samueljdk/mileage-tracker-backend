@@ -19,4 +19,6 @@ create user accounts to allow different users to use the software. this will inc
 
 7. Display total km on homepage- DONE 
 
-8. Homepage sort by date toggle. 
+8. Homepage sort by date toggle. -DONE
+
+9. Search bar on homepage- DONE
