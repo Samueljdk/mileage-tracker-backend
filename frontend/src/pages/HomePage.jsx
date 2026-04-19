@@ -12,6 +12,11 @@ const homePage = () => {
   const [trips, setTrips] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
+  const [filter, setFilter] = React.useState("all");
+  const filteredTrips= filter === "all" ? trips : trips.filter(t => t.tripType === filter);
+
+  
+  {/*display trips on homepage*/}
   useEffect(() => {
     const fetchTrips = async () => {
       try {
@@ -38,22 +43,37 @@ const homePage = () => {
 
 
   return (
+
     <div className= "min-h-screen">
-      <Navbar />
-      {isRateLimited && <RateLimitedUI />}
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {loading && <div className="text-center text-gray-500">Loading trips...</div>}
+       <Navbar />
+        {isRateLimited && <RateLimitedUI />}
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          {loading && <div className="text-center text-gray-500">Loading trips...</div>}
 
-    {trips.length === 0 && !loading && !isRateLimited && <TripsNotFound />}
+          {trips.length === 0 && !loading && !isRateLimited && <TripsNotFound />}
 
-    {trips.length > 0 && !isRateLimited && (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {trips.map((trip) => (
-            <TripDashboard key={trip._id} trip={trip} setTrips={setTrips} />
-        ))}
-      </div>
-    )}
-      </div>
+          {/*filter trips*/}
+          <select 
+            className="select select-bordered select-sm mb-4"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          >
+            <option value="all">All Trips</option>
+            <option value="business">Business</option>
+            <option value="personal">Personal</option>
+          </select>
+
+          
+          {/*display trips if available */}
+          {trips.length > 0 && !isRateLimited && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/*displaying filtered trips*/}
+                {filteredTrips.map((trip) => (
+                    <TripDashboard key={trip._id} trip={trip} setTrips={setTrips} /> 
+                ))}
+              </div>
+            )}
+        </div>
     </div>
   );
 

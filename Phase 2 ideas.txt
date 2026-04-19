@@ -13,7 +13,7 @@ create user accounts to allow different users to use the software. this will inc
 
 4. auto odomometer start from last trip- DONE
 
-5. filter/search
+5. homepage trip filter- DONE
 
 6. Trip type (business/personal)- Done
 
