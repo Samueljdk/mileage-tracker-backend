@@ -34,22 +34,35 @@ const CreatePage = () => {
       return;
     }
     
+    
+    
     {/* Validate odometer readings */}
-    const start = parseInt(odometerStart, 10);
-    const end = parseInt(odometerEnd, 10);
+      const start = parseInt(odometerStart, 10);
+      const end = parseInt(odometerEnd, 10);
 
-    if(Number.isNaN(start) || Number.isNaN(end))
-    {
-      toast.error("Odometer readings must be valid numbers.");
-      setLoading(false);
-      return;
-    }
-    if(end<start)
-    {
-      toast.error("Odometer end reading must be greater than or equal to start reading.");
-      setLoading(false);
-      return;
-    }
+      {/*check if readings are valid numbers*/}
+      if(Number.isNaN(start) || Number.isNaN(end))
+      {
+        toast.error("Odometer readings must be valid numbers.");
+        setLoading(false);
+        return;
+      }
+      
+      {/*check if readings are non-negative*/}
+      if(start < 0 || end < 0)
+      {
+        toast.error("Odometer readings cannot be negative.");
+        setLoading(false);
+        return;
+      }
+
+      {/*check if end reading is greater than or equal to start reading*/}
+      if(end<start)
+      {
+        toast.error("Odometer end reading must be greater than or equal to start reading.");
+        setLoading(false);
+        return;
+      }
     
     {/* If validation passes, proceed to submit the form */}
     setLoading(true);
@@ -309,7 +322,7 @@ const CreatePage = () => {
                         {/*submit button*/}
                         <div className="card-actions justify-end">
                           <button type="submit" className="btn btn-primary" disabled={loading}>
-                            {loading ? "Creating..." : "Create Trip"}
+                            {loading ? "Creating..." : "Save Trip"}
                           </button>
                         </div>
                         
