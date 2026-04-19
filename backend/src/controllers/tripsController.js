@@ -38,7 +38,15 @@ export async function createTrip(req, res) {
             odometerEnd, 
             remarks } = req.body;
         
-        const distanceCal = odometerEnd - odometerStart;
+
+        const odometerStartNum = Number(odometerStart);
+        const odometerEndNum = Number(odometerEnd);
+
+        if(Number.isNaN(odometerStartNum) || Number.isNaN(odometerEndNum)) {
+            return res.status(400).json({message: "Odometer readings must be valid numbers"});
+        }
+
+        const distanceCal = odometerEndNum - odometerStartNum;
         if (distanceCal < 0) {
             return res.status(400).json({message: "Odometer end reading must be greater than or equal to start reading"});
         }
@@ -51,8 +59,8 @@ export async function createTrip(req, res) {
             endLocation,
             purpose,
             tripType,
-            odometerStart,
-            odometerEnd,
+            odometerStart: odometerStartNum,
+            odometerEnd: odometerEndNum,
             distance: distanceCal,
             remarks
         });

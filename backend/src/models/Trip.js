@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 const tripSchema = new mongoose.Schema({
     userId: { //to be used for firebase user authentication UID
         type: String,
-        required: true,
+        required: false,
         default: null
     },
     title:{

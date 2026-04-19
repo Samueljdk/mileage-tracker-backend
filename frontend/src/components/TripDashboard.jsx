@@ -50,22 +50,32 @@ const TripDashboard = ({ trip, setTrips }) => {
             {trip.title} - {trip.startLocation} to {trip.endLocation}</h3>
         <p className="text-base-content/70 line-clamp-3">{trip.description}</p>
         <div className="card-actions justify-between items-center mt-4">
+
+            {/*badge*/}
+            <span className={`badge badge-sm ${trip.tripType === "business" ? "badge-primary" : "badge-secondary"}`}>
+                {trip.tripType}
+            </span>
+
+            {/*date*/}
             <span className="text-sm text-base-content/60">{new Date(trip.date).toLocaleDateString()}</span>
-            <div className="flex items-center gap-2"> 
 
-                {/*clone*/}
-                <button className="btn btn-ghost btn-xs" onClick={handleClone} title="Clone Trip">
-                    <CopyIcon className="size-4"/>
-                </button>
+                {/*actions- clone, edit, and delete*/}
+                <div className="flex items-center gap-2"> 
+
+                    {/*clone*/}
+                    <button className="btn btn-ghost btn-xs" onClick={handleClone} title="Clone Trip">
+                        <CopyIcon className="size-4"/>
+                    </button>
 
 
-                {/*delete*/}
-                <PenSquareIcon className="size-4"/>
-                <button className="btn btn-ghost btn-xs text-error" onClick={(e) => handleDelete(e, trip._id)}>
-                    <Trash2Icon className="size-4"/>
-                </button>
+                    {/*delete*/}
+                    <PenSquareIcon className="size-4"/>
+                    <button className="btn btn-ghost btn-xs text-error" onClick={(e) => handleDelete(e, trip._id)}>
+                        <Trash2Icon className="size-4"/>
+                    </button>
 
-            </div>
+                </div>
+
         </div>
     </div>
   </Link>

@@ -23,16 +23,37 @@ const CreatePage = () => {
   const unsavedChanges = !localStorage.getItem("clonedTrip") && (title || purpose || startLocation || endLocation || odometerStart || odometerEnd || remarks);
 
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    {/*client-side validation*/}
     if (!title.trim() || !purpose.trim() || !date.trim() || !startLocation.trim() || !endLocation.trim() || !odometerStart.trim() || !odometerEnd.trim()) {
       toast.error("Please fill in all required fields (Title, Purpose, Date, Start Location, End Location, Odometer Start, Odometer End).");
       setLoading(false);
       return;
     }
-      
+    
+    {/* Validate odometer readings */}
+    const start = parseInt(odometerStart, 10);
+    const end = parseInt(odometerEnd, 10);
+
+    if(Number.isNaN(start) || Number.isNaN(end))
+    {
+      toast.error("Odometer readings must be valid numbers.");
+      setLoading(false);
+      return;
+    }
+    if(end<start)
+    {
+      toast.error("Odometer end reading must be greater than or equal to start reading.");
+      setLoading(false);
+      return;
+    }
+    
+    {/* If validation passes, proceed to submit the form */}
     setLoading(true);
+
     try{
       await api.post("/trips", {
         title,
@@ -41,8 +62,8 @@ const CreatePage = () => {
         date,
         startLocation,
         endLocation,
-        odometerStart,
-        odometerEnd,
+        odometerStart: start,
+        odometerEnd: end,
         remarks
       });
 
@@ -52,12 +73,20 @@ const CreatePage = () => {
 
     }catch(error){
       console.error("Error creating trip:", error);
-      if(error.response.status===429){
-        toast.error("You have reached the rate limit. Please wait before creating another trip.");
-      }else
+
+      const status=error.response?.status;
+      const message=error.response?.data?.message||"Unknown error";
+
+      if (status === 429)
       {
-        toast.error("An error occurred while creating the trip. Please try again later.");
+        toast.error("You have reached the rate limit. Please wait before creating another trip.");
       }
+      else if (status === 400)
+      {
+        toast.error(message);
+      }
+      else {toast.error("An error occurred while creating the trip. Please try again later.");}
+
     }finally{
       setLoading(false);
     }
@@ -66,10 +95,10 @@ const CreatePage = () => {
     console.log({ title, purpose, date, startLocation, endLocation, odometerStart, odometerEnd, tripType });
     
 
-    setTimeout(() => {
-      setLoading(false);
+    //setTimeout(() => {
+      //setLoading(false);
       //alert("Trip created successfully!");
-    }, 1000);
+    //}, 1000);
   };
 
 
@@ -277,6 +306,7 @@ const CreatePage = () => {
                           />
                         </div>
                         
+                        {/*submit button*/}
                         <div className="card-actions justify-end">
                           <button type="submit" className="btn btn-primary" disabled={loading}>
                             {loading ? "Creating..." : "Create Trip"}

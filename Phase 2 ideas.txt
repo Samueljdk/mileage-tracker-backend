@@ -9,11 +9,11 @@ phase 2 improvement ideas:
 2. Add user account manager:
 create user accounts to allow different users to use the software. this will include a sign up, sign in and a code management database. options include using a 3rd party plugin to manage user accounts. 
 
-3. export trips
+3. export trips- Done
 
 4. auto odomometer start from last trip- DONE
 
 5. filter/search
 
-6. Trip type (business/personal)
+6. Trip type (business/personal)- Done
 
